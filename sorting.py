@@ -1,7 +1,7 @@
 import time
 
 def bubble(list):
-	for i in reversed(range(len(list) - 1)):
+	for i in reversed(range(len(list))):
 		for j in range(i):
 			if list[j] >= list[j + 1]:
 				list[j], list[j + 1] = list[j + 1], list[j]
@@ -24,6 +24,7 @@ def insertion(list):
 if __name__ == '__main__':
 
 	methods = ['bubble', 'selection', 'insertion']
+	times = dict()
 
 	while True:
 
@@ -44,6 +45,15 @@ if __name__ == '__main__':
 		if sort == 'bubble':
 			start = time.time()
 			bubble(numbers)
-			time.sleep(1)
-			print('{:.8f}'.format(time.time() - start - 1))
-			print(numbers)
+
+		elif sort == 'selection':
+			start = time.time()
+			selection(numbers)
+
+		elif sort == 'insertion':
+			start = time.time()
+			insertion(numbers)
+
+		print(numbers)
+		times[sort] = '{:.15f}'.format(time.time() - start)
+		print(times)
