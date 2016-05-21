@@ -1,59 +1,75 @@
 import time
 
-def bubble(list):
-	for i in reversed(range(len(list))):
+def swap(array, i, j):
+	temp = array[i]
+	array[i] = array[j]
+	array[j] = temp
+
+def bubble(array):
+	for i in reversed(range(len(array))):
 		for j in range(i):
-			if list[j] >= list[j + 1]:
-				list[j], list[j + 1] = list[j + 1], list[j]
-				
-def selection(list):
-	for i in range(len(list)):
-		list[list.index(min(list[i:]))], list[i] = list[i], list[list.index(min(list[i:]))]
+			if array[j] >= array[j + 1]:
+				swap(array, j, j + 1)
 
-def insertion(list):
-	for i in range(1, len(list)):
+def selection(array):
+	for i in range(len(array)):
+		i_min = i
+		for j in range(i + 1, len(array)):
+			if array[j] < array[i_min]:
+				i_min = j
+		swap(array, i, i_min)
 
-		temp = list[i]
-		index = i - 1
+def insertion(array):
+	for i in range(len(array)):
+		j = i
+		while j > 0 and array[j - 1] > array[j]:
+			swap(array, j - 1, j)
+			j -= 1
 
-		while i >= 0 and temp < list[index]:
-			if temp < list[index]:
-				list[index + 1] = list[index]
-				list[index] = temp
+def case(name, array):
+	switcher = {
+		'bubble': bubble,
+		'selection': selection,
+		'insertion': insertion
+	}
+	func = switcher.get(name, lambda: 'No such sort method')
+	return func(array)
 
 if __name__ == '__main__':
 
 	methods = ['bubble', 'selection', 'insertion']
 	times = dict()
 
-	while True:
+	# print("Input a list. Leave input empty when you are done.")
+	numbers = list()
+	# while True:
+    #
+	# 	elem = input()
+	# 	if elem is '':
+	# 		break
+	# 	numbers.append(int(elem))
 
-		print("Input a list. Leave input empty when you are done.")
-		numbers = list()
+	for i in range(1000):
+		if i % 2:
+			i = -i
+		numbers.append(i)
+
+	for i in range(2):
+
+		temp = numbers.copy()
 
 		while True:
-			elem = input()
-			if elem is '':
+			print('Choose a sort method. Available methods are:\n', methods)
+			sort = input()
+			if sort in methods:
 				break
-			numbers.append(int(elem))
+			print('Wrong method.')
 
-		print('Choose a sort method. Available methods are:\n', methods)
-		sort = input()
+		start = time.time()
+		case(sort, temp)
 
+		times['{:.8f}'.format(time.time() - start)] = sort
 		methods.remove(sort)
 
-		if sort == 'bubble':
-			start = time.time()
-			bubble(numbers)
-
-		elif sort == 'selection':
-			start = time.time()
-			selection(numbers)
-
-		elif sort == 'insertion':
-			start = time.time()
-			insertion(numbers)
-
-		print(numbers)
-		times[sort] = '{:.15f}'.format(time.time() - start)
-		print(times)
+	best = min(list(times.keys()))
+	print('Best time shown: {} sec by {} sort'.format(best, times.get(best)))
