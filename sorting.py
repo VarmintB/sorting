@@ -25,25 +25,29 @@ def insertion(array):
 		while j > 0 and array[j - 1] > array[j]:
 			swap(array, j - 1, j)
 			j -= 1
+def minsearch(array):
+        for i in range(len(array)):
+                swap(array, array.index(min(array[i:])), i)
 
 def case(name, array):
 	switcher = {
 		'bubble': bubble,
 		'selection': selection,
-		'insertion': insertion
+		'insertion': insertion,
+                'minsearch': minsearch
 	}
 	func = switcher.get(name, lambda: 'No such sort method')
 	return func(array)
 
 if __name__ == '__main__':
 
-	methods = ['bubble', 'selection', 'insertion']
+	methods = ['bubble', 'selection', 'insertion', 'minsearch']
 	times = dict()
 
 	# print("Input a list. Leave input empty when you are done.")
 	numbers = list()
 	# while True:
-    #
+        #
 	# 	elem = input()
 	# 	if elem is '':
 	# 		break
